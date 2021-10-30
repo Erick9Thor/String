@@ -70,6 +70,13 @@ char String::operator[](int index) const
 	return buffer[index];
 }
 
+void String::clear()
+{
+	delete[] buffer;
+	size = 0;
+	buffer = new char[size]();
+}
+
 bool operator==(const String& lhs, const String& rhs)
 {
 	if (lhs.size != rhs.size) return false;

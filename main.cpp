@@ -23,7 +23,8 @@ int main() {
 	std::cout << c.length() << "\n";
 
 	c.clear();
+	/*
+	String d = GetMeAString();
 
-	String a = GetMeAString();
-
+	std::cout << d;*/
 }

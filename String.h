@@ -34,7 +34,7 @@ class String
 		friend ostream& operator<<(ostream& cout, const String& obj);
 
 		inline unsigned int length() { return size; }
-		inline void clear() { cleanBuffer(); }
+		void clear();
 };
 
 #endif //__String__
