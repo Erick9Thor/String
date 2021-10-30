@@ -2,24 +2,24 @@
 #include <string.h>
 
 String::String(const char* string) {
-	length = strlen(string);
-	buffer = new char[length + 1]; // '\0' keeping 
+	size = strlen(string);
+	buffer = new char[size + 1]; // '\0' keeping 
 
-	strncpy_s(buffer, length + 1, string, length);
+	strncpy_s(buffer, size + 1, string, size);
 }
 
 String::String(const String& string) {
-	length = string.length;
-	buffer = new char[length + 1];
+	size = string.size;
+	buffer = new char[size + 1];
 
-	strncpy_s(buffer, length + 1, string.buffer, length);
+	strncpy_s(buffer, size + 1, string.buffer, size);
 }
 
 String::String(String&& dyingString) noexcept
 {
 	cleanBuffer();
 
-	length = dyingString.length;
+	size = dyingString.size;
 	buffer = dyingString.buffer;
 	dyingString.buffer = nullptr;
 }
@@ -33,7 +33,7 @@ String& String::operator=(String&& dyingString) noexcept
 {
 	cleanBuffer();
 
-	length = dyingString.length;
+	size = dyingString.size;
 	buffer = dyingString.buffer;
 	dyingString.buffer = nullptr;
 
@@ -44,10 +44,10 @@ String& String::operator=(const String& string)
 {
 	cleanBuffer();
 
-	length = string.length;
-	buffer = new char[length + 1];
+	size = string.size;
+	buffer = new char[size + 1];
 
-	strncpy_s(buffer, length + 1, string.buffer, length);
+	strncpy_s(buffer, size + 1, string.buffer, size);
 
 	return *this;
 }
@@ -55,13 +55,32 @@ String& String::operator=(const String& string)
 String String::operator+(const String& string)
 {
 	String result;
-	result.length = length + string.length;
-	result.buffer = new char[result.length + 1];
+	result.size = size + string.size;
+	result.buffer = new char[result.size + 1];
 
-	strncpy_s(result.buffer, length + 1, buffer, length);
-	strncpy_s(result.buffer + length, string.length + 1, string.buffer, string.length);
+	strncpy_s(result.buffer, size + 1, buffer, size);
+	strncpy_s(result.buffer + size, string.size + 1, string.buffer, string.size);
 
 	return result;
+}
+
+char String::operator[](int index) const
+{
+	if (index >= size) throw 1;
+	return buffer[index];
+}
+
+bool operator==(const String& lhs, const String& rhs)
+{
+	if (lhs.size != rhs.size) return false;
+
+	int lhs_length = lhs.size;
+	int index = 0;
+
+	while ((index < lhs_length) && (lhs[index] == rhs[index])) ++index;
+
+	return (index == lhs_length);
+
 }
 
 ostream& operator<<(ostream& cout, const String& obj)
